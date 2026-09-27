@@ -1,0 +1,23 @@
+# Godot 4+ ignores
+.godot/
+*.translation
+/android/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDE and local AI configs (avoid absolute path conflicts across devices)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.cursor/*
+!.cursor/settings.json
+.mcp.json
+
+# Secrets & local scratch files
+.secrets/
+*.env
+*.log
