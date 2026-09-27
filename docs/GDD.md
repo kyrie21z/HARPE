@@ -6,7 +6,7 @@
 - **游戏类型**：俯视角 2D 动作肉鸽（Top-Down Action Roguelite）
 - **核心内核**：**登峰造极（Mastery）与高风险取舍（Risk & Reward）**
 - **目标平台**：PC (Steam / itch.io)
-- **开发引擎**：Godot 4.x (GDScript)
+- **开发引擎**：**Godot Engine v4.7.2-stable (Standard 官方版)** + GDScript 2.0（全设备统一锁定）
 
 ---
 

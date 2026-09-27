@@ -7,7 +7,7 @@
 
 ## 1. 项目概况与架构定位
 - **项目名称**：`HARPE`
-- **引擎版本**：Godot 4.3+ (推荐 4.7 Standard，严禁使用 Mono/.NET C# 版本)
+- **引擎版本**：**Godot Engine v4.7.2-stable (Standard 官方版)**（多设备间必须完全一致，严禁使用 Mono/.NET C# 版本）
 - **脚本语言**：**GDScript 2.0**
 - **游戏类型**：俯视角 2D 动作肉鸽（Top-Down Action Roguelite）
 - **核心输入映射（见 project.godot）**：

@@ -18,7 +18,7 @@
 ## 🛠️ 技术栈与多设备开发指南
 
 ### 1. 引擎与环境要求
-- **引擎**：[Godot Engine 4.3+](https://godotengine.org) (Standard 版，无需 .NET)
+- **引擎**：**Godot Engine v4.7.2-stable (Standard 官方版)**，请保持各设备版本严格一致（严禁使用 Mono / .NET C# 版）
 - **语言**：GDScript 2.0
 
 ### 2. 跨设备开发说明
