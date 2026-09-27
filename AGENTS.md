@@ -1,76 +1,57 @@
 # AGENTS.md — AI 协作与开发准则
 
-本文件为任何接入此代码库的 AI 编码助手（包括但不限于 Cursor, Claude, Antigravity, GitHub Copilot 等）提供核心技术上下文与开发规范。
-所有 AI 在阅读本仓库或修改代码前，**必须严格遵守以下约定**。
+## 1. 项目与文档职责
 
----
+HARPE 是使用 GDScript 开发的俯视角 2D 动作肉鸽。本文件规定 AI 如何在仓库中开展工作。
 
-## 1. 项目概况与架构定位
-- **项目名称**：`HARPE`
-- **引擎版本**：**Godot Engine v4.7.2-stable (Standard 官方版)**（多设备间必须完全一致，严禁使用 Mono/.NET C# 版本）
-- **脚本语言**：**GDScript 2.0**
-- **游戏类型**：俯视角 2D 动作肉鸽（Top-Down Action Roguelite）
-- **核心输入映射（见 project.godot）**：
-  - `move_up` (W), `move_down` (S), `move_left` (A), `move_right` (D)
-  - `dash` (Shift): 极速瞬步（充能限制）
-  - `attack` (鼠标左键): 点按轻击，长按蓄力重斩
-  - `parry` (鼠标右键): 弹反格挡
+- **AGENTS.md**：协作流程、仓库操作与编码约定，不重复定义玩法数值或系统契约。
+- **[Bible](docs/bible/_index.md)**：当前有效的技术基线、玩法、架构与体验契约，是这些规则的唯一事实来源。
+- **[Dev Logs](docs/dev_logs/PROVENANCE.md)**：研发决策、试错与验证证据；历史结论不自动覆盖当前契约。
+- 代码、场景与配置用于核验实际实现。发现它们与契约不一致时报告差异，不把现状自动视为已批准设计，也不通过改写 Bible 使错误实现合规。
 
----
+## 2. 任务前查阅
 
-## 2. 目录规范与文件组织
-所有资源与代码必须严格归类，禁止在根目录散落文件：
-- `res://scenes/`：所有 `.tscn` 场景文件（如 `Main.tscn`, `Player.tscn`）
-- `res://scripts/`：所有 `.gd` 脚本文件（纯数据类、管理器、逻辑控制器）
-- `res://assets/`：静态美术贴图、音频、字体等资产
-- `res://docs/`：设计文档与技术方案（如 `GDD.md`）
+修改代码前，核对 [Bible 不变量](docs/bible/_index.md)，再按任务读取：
 
----
+| 任务涉及 | 查阅入口 |
+| --- | --- |
+| 引擎环境、输入、玩法、数值或需求边界 | [SPEC](docs/bible/SPEC.md) |
+| 节点职责、公共接口、信号或跨系统依赖 | [MODULES](docs/bible/MODULES.md) |
+| 动作手感、顿帧或视听反馈 | [EXPERIENCE](docs/bible/EXPERIENCE.md) |
+| 重大架构设计、核心机制重构或手感调优 | 按主题检索 [研发记录](docs/dev_logs/records/)，核对适用条件与后续修正 |
 
-## 3. GDScript 编码规范
-1. **静态类型标注（Strict Static Typing）**：
-   所有变量、函数参数和返回值必须尽量显式标注类型：
-   ```gdscript
-   var current_health: float = 100.0
-   func take_damage(amount: float) -> void:
-       current_health -= amount
-   ```
-2. **命名约定**：
-   - 节点与类名：帕斯卡命名法（`PascalCase`），如 `PlayerCharacter`, `HitBox2D`
-   - 脚本文件名：帕斯卡或下划线（推荐小写下划线 `player_controller.gd`）
-   - 变量与函数：蛇形命名法（`snake_case`），如 `is_charging`, `perform_parry()`
-   - 常量与枚举：全大写下划线（`SCREAMING_SNAKE_CASE`），如 `MAX_DASH_COUNT`
-   - 私有变量/内部方法：前缀下划线，如 `_update_charge_state()`
-3. **节点引用机制**：
-   优先使用 `@onready` 与显式类型注解：
-   ```gdscript
-   @onready var sprite: Sprite2D = $Sprite2D
-   @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-   ```
-4. **信号优先原则（Signal Up, Call Down）**：
-   父节点调用子节点的方法，子节点通过信号（`signal`）向父节点报告状态变更，保持组件解耦。
+文档任务读取其涉及的规则来源。优先定向检索，根据调用关系和故障证据逐步扩大范围；所需契约缺失时明确指出，不自行推定规则。
 
----
+## 3. 执行与确认边界
 
-## 4. 核心战斗逻辑约定
-- **弹反窗口（Parry Window）**：判定时间保持在极短的 0.1~0.15 秒窗口，判定精准、不拖泥带水；
-- **打击感三要素**：任何受击/招架必须配套：
-  1. 顿帧（`Engine.time_scale` 临时归零 0.05~0.1 秒）；
-  2. 屏幕震动（Camera Shake）；
-  3. 火花粒子与音效。
-- **瞬步（Dash）**：严格保持充能点数限制，不可无限连按；弹反成功有能力重置瞬步。
+- 既有契约内的实现、修复与验证直接执行，跨文件或跨模块本身不构成额外确认条件。
+- 拟改变玩法规则、系统职责、公共接口、依赖方向或不变量时，先说明受影响模块、接口或信号、契约变化及验证方式，得到确认后实施。已明确批准的方案不重复确认；新增的实质范围变化另行说明。
+- 任务或方案与不变量存在冲突时，暂停受影响部分并报告冲突，提出处理建议；只有明确批准修订契约后才能改变对应规则。
+- 需要展开方案沟通时参考 [三次对话法](prompts/three_turn_guide.md)，不以固定对话次数作为实施前提。
 
----
+## 4. 仓库与编码约定
 
-## 5. 多设备开发边界提醒
-- **不要提交本地专用绝对路径**（如 `C:\Godot\...` 等写在仓库配置文件中）；
-- 本地生成的 `.mcp.json` 或 `.cursor/mcp.json` 已在 `.gitignore` 保护，统一在各自设备按需要配置。
+- 修改前检查工作区已有变更，保留用户工作，控制改动范围。不得覆盖无关修改或顺手重构。
+- 新增业务文件按用途归类：`scenes/` 放场景，`scripts/` 放脚本，`assets/` 放静态资源，`docs/` 放设计与技术文档；必要的根目录配置和工具目录按其用途保留。
+- 变量、函数参数、返回值与节点引用尽量显式标注类型；节点引用优先使用 `@onready`。
+- 节点与类使用 `PascalCase`；脚本文件推荐 `snake_case.gd`；变量与函数使用 `snake_case`；常量与枚举使用 `SCREAMING_SNAKE_CASE`；内部成员使用 `_` 前缀。
+- 可供策划调整的玩法参数使用带类型的 `@export`，已有安全范围时用适当的导出范围约束；内部常量、索引和运行时状态无需导出。参数边界按 SPEC 执行，新增但未覆盖的玩法参数需先明确范围。
+- 系统通信遵循 MODULES 的依赖契约；场景和资源修改保持节点引用、信号连接与资源 UID 的一致性。
+- 本机绝对路径、凭据和本地工具配置保留在本机，提交前检查忽略规则与实际差异；未经任务授权不升级引擎或依赖、不提交或推送。
 
----
+## 5. 验证要求
 
-## 6. 游戏研发留痕 (GameDev Provenance)
-- **改动前查阅**：重大架构设计、核心战斗机制重构（如弹反判定、输入映射、状态机重写）或手感调优前，按主题检索 `docs/dev_logs/records/` 的既有经验、避坑记录与适用条件；
-- **沉淀重要改动**：出现机制验证结果、重要试错失败、严重 Bug/物理穿模解决、放弃的方向或影响旧结论的问题时，按 `docs/dev_logs/PROVENANCE.md` 留痕，模板见 `docs/dev_logs/templates/record.md`；
-- **任务收尾报告**：收尾报告记录 ID 与路径；无研发决策/机制变化报告 `NO_DEV_DELTA` 及原因，归档失败报告 `ARCHIVE_PENDING`、原因与已有产物位置；
-- **阶段复盘**：阶段与周复盘使用 `docs/dev_logs/templates/retrospective.md`，记录正文保持单一事实来源，旧结论通过新记录显式修正。
+- 使用引擎验证前读取实际版本，对照 SPEC 的技术基线；不匹配时报告差异，不擅自升级项目或将其结果视为目标环境验收。
+- 脚本修改执行相应解析或导入检查；场景、节点路径和信号修改验证相关场景加载与运行。
+- 战斗行为修改给出操作步骤、预期行为和实际观察；静态检查通过不能替代实机手感验收。
+- 纯文档修改检查引用路径、规则一致性和差异范围，无需启动引擎。
+- 收尾区分已执行且通过、失败、未执行的检查，说明失败或未执行原因，不将推测写成验证结果。
 
+## 6. 文档同步与交付
+
+- 当前规格或公共契约发生已批准的变化时，同步对应 Bible，避免把具体规则复制回 AGENTS.md。
+- 产生重要研发决策、机制验证、试错失败、严重 Bug 解决、放弃方向或旧结论修正时，按 [PROVENANCE](docs/dev_logs/PROVENANCE.md) 留痕，使用 [记录模板](docs/dev_logs/templates/record.md)。纯文档职责整理、格式调整或无重要研发结论的内部清理无需新增记录。
+- 阶段或周复盘使用 [复盘模板](docs/dev_logs/templates/retrospective.md)，引用原记录，保持经历正文单一来源。
+- 收尾简要报告改动、验证结果与未完成项，并注明：
+  - `BIBLE_DELTA: NONE` 或具体更新项（仅迁移、澄清规则归属也应说明）。
+  - 留痕记录 ID 与路径；无需记录时写 `NO_DEV_DELTA` 及原因；归档失败时写 `ARCHIVE_PENDING`、原因与已有产物位置。

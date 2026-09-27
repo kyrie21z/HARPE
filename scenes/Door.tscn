@@ -1,0 +1,130 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/door.gd" id="1_door"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_trigger"]
+size = Vector2(90, 45)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_barrier"]
+size = Vector2(110, 30)
+
+[node name="Door" type="Node2D"]
+script = ExtResource("1_door")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="PortalLight" type="Polygon2D" parent="Visuals"]
+modulate = Color(1, 1, 1, 0)
+color = Color(0.4, 0.85, 1, 0.45)
+polygon = PackedVector2Array(-42, 0, 42, 0, 68, 70, -68, 70)
+
+[node name="DoorThreshold" type="Polygon2D" parent="Visuals"]
+color = Color(0.12, 0.16, 0.22, 1)
+polygon = PackedVector2Array(-55, -20, 55, -20, 55, 20, -55, 20)
+
+[node name="GateSlab" type="Polygon2D" parent="Visuals"]
+color = Color(0.22, 0.28, 0.38, 1)
+polygon = PackedVector2Array(-46, -18, 46, -18, 46, 16, -46, 16)
+
+[node name="GateBars" type="Line2D" parent="Visuals/GateSlab"]
+points = PackedVector2Array(-30, -18, -30, 16, -10, 16, -10, -18, 10, -18, 10, 16, 30, 16, 30, -18)
+width = 3.0
+default_color = Color(0.12, 0.16, 0.22, 1)
+
+[node name="PillarLeft" type="Polygon2D" parent="Visuals"]
+color = Color(0.72, 0.62, 0.45, 1)
+polygon = PackedVector2Array(-65, -30, -45, -30, -45, 25, -65, 25)
+
+[node name="PillarRight" type="Polygon2D" parent="Visuals"]
+color = Color(0.72, 0.62, 0.45, 1)
+polygon = PackedVector2Array(45, -30, 65, -30, 65, 25, 45, 25)
+
+[node name="Architrave" type="Polygon2D" parent="Visuals"]
+color = Color(0.85, 0.75, 0.55, 1)
+polygon = PackedVector2Array(-72, -35, 72, -35, 72, -22, -72, -22)
+
+[node name="Pediment" type="Polygon2D" parent="Visuals"]
+color = Color(0.92, 0.82, 0.6, 1)
+polygon = PackedVector2Array(-60, -35, 0, -52, 60, -35)
+
+[node name="RewardBadge" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, 5)
+
+[node name="BadgeBackground" type="Polygon2D" parent="RewardBadge"]
+color = Color(0.05, 0.07, 0.11, 0.92)
+polygon = PackedVector2Array(-75, -42, 75, -42, 75, 42, -75, 42)
+
+[node name="BadgeBorder" type="Line2D" parent="RewardBadge"]
+points = PackedVector2Array(-75, -42, 75, -42, 75, 42, -75, 42, -75, -42)
+width = 2.0
+default_color = Color(0.4, 0.85, 1, 1)
+
+[node name="IconAnchor" type="Node2D" parent="RewardBadge"]
+position = Vector2(0, -18)
+
+[node name="IconShield" type="Polygon2D" parent="RewardBadge/IconAnchor"]
+visible = false
+color = Color(0.4, 0.85, 1, 1)
+polygon = PackedVector2Array(-14, -14, 14, -14, 17, 0, 11, 14, 0, 19, -11, 14, -17, 0)
+
+[node name="IconWing" type="Polygon2D" parent="RewardBadge/IconAnchor"]
+visible = false
+color = Color(1, 0.75, 0.2, 1)
+polygon = PackedVector2Array(-16, 12, -8, 2, -2, -6, 8, -16, 16, -18, 12, -6, 16, 2, 8, 8, 0, 12)
+
+[node name="IconBlade" type="Polygon2D" parent="RewardBadge/IconAnchor"]
+visible = false
+color = Color(1, 0.35, 0.25, 1)
+polygon = PackedVector2Array(-4, -18, 4, -18, 12, -8, 16, 4, 10, 16, 4, 20, 6, 10, 10, 0, 2, -8, -4, -8)
+
+[node name="IconChalice" type="Polygon2D" parent="RewardBadge/IconAnchor"]
+visible = false
+color = Color(0.3, 0.95, 0.5, 1)
+polygon = PackedVector2Array(-14, -12, 14, -12, 12, 0, 3, 6, 3, 13, 9, 17, -9, 17, -3, 13, -3, 6, -12, 0)
+
+[node name="IconCrown" type="Polygon2D" parent="RewardBadge/IconAnchor"]
+visible = false
+color = Color(1, 0.85, 0.3, 1)
+polygon = PackedVector2Array(0, -16, 5, -5, 16, -5, 8, 3, 11, 14, 0, 8, -11, 14, -8, 3, -16, -5, -5, -5)
+
+[node name="RewardTitle" type="Label" parent="RewardBadge"]
+offset_left = -72.0
+offset_top = 4.0
+offset_right = 72.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 13
+text = "雅典娜 · 镜盾"
+horizontal_alignment = 1
+
+[node name="RewardDesc" type="Label" parent="RewardBadge"]
+offset_left = -72.0
+offset_top = 22.0
+offset_right = 72.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(0.75, 0.85, 0.95, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 10
+text = "弹反神力三选一"
+horizontal_alignment = 1
+
+[node name="TriggerArea" type="Area2D" parent="."]
+position = Vector2(0, 20)
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerArea"]
+shape = SubResource("RectangleShape2D_trigger")
+
+[node name="PhysicalBarrier" type="StaticBody2D" parent="."]
+position = Vector2(0, 5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicalBarrier"]
+shape = SubResource("RectangleShape2D_barrier")

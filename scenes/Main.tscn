@@ -1,3 +1,310 @@
 [gd_scene format=3 uid="uid://c8y1f4k2x8p7m"]
 
-[node name="Main" type="Node2D"]
+[ext_resource type="Script" uid="uid://b7hxfd20f4i44" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://bvyqk5u7m3w4r" path="res://scenes/Player.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://cewg37j8idtaw" path="res://scripts/wave_manager.gd" id="3_wave_mgr"]
+[ext_resource type="PackedScene" uid="uid://df2m4r10v7y5q" path="res://scenes/BoonSelectUI.tscn" id="4_boon_ui"]
+[ext_resource type="PackedScene" path="res://scenes/Door.tscn" id="5_door"]
+[ext_resource type="Script" path="res://scripts/restart_button.gd" id="6_restart_btn"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
+normal = Vector2(0, 1)
+distance = -500.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_bottom"]
+distance = -500.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_left"]
+normal = Vector2(1, 0)
+distance = -800.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_right"]
+normal = Vector2(-1, 0)
+distance = -800.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_fill"]
+bg_color = Color(0.2, 0.85, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Main" type="Node2D" unique_id=1185901021]
+script = ExtResource("1_main")
+
+[node name="ArenaFloor" type="Node2D" parent="." unique_id=168519453]
+
+[node name="FloorBase" type="Polygon2D" parent="ArenaFloor" unique_id=1133607864]
+position = Vector2(-66, 26)
+color = Color(0.08, 0.1, 0.14, 1)
+polygon = PackedVector2Array(-900, -600, 900, -600, 900, 600, -900, 600)
+
+[node name="ArenaBorder" type="Line2D" parent="ArenaFloor" unique_id=1225521830]
+points = PackedVector2Array(-800, -500, 800, -500, 800, 500, -800, 500, -800, -500)
+width = 6.0
+default_color = Color(0.24, 0.32, 0.44, 1)
+
+[node name="Pillars" type="Node2D" parent="." unique_id=1648412980]
+
+[node name="PillarTL" type="StaticBody2D" parent="Pillars" unique_id=240618458]
+position = Vector2(-400, -250)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pillars/PillarTL" unique_id=474298766]
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="Visual" type="Polygon2D" parent="Pillars/PillarTL" unique_id=1111436603]
+color = Color(0.2, 0.28, 0.38, 1)
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="PillarTR" type="StaticBody2D" parent="Pillars" unique_id=119481280]
+position = Vector2(400, -250)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pillars/PillarTR" unique_id=370053663]
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="Visual" type="Polygon2D" parent="Pillars/PillarTR" unique_id=958877848]
+color = Color(0.2, 0.28, 0.38, 1)
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="PillarBL" type="StaticBody2D" parent="Pillars" unique_id=545742796]
+position = Vector2(-400, 250)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pillars/PillarBL" unique_id=1555269761]
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="Visual" type="Polygon2D" parent="Pillars/PillarBL" unique_id=1284250597]
+color = Color(0.2, 0.28, 0.38, 1)
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="PillarBR" type="StaticBody2D" parent="Pillars" unique_id=367561952]
+position = Vector2(400, 250)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pillars/PillarBR" unique_id=1188442919]
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="Visual" type="Polygon2D" parent="Pillars/PillarBR" unique_id=1645282363]
+color = Color(0.2, 0.28, 0.38, 1)
+polygon = PackedVector2Array(-30, -30, 30, -30, 30, 30, -30, 30)
+
+[node name="ArenaBounds" type="StaticBody2D" parent="." unique_id=74793236]
+
+[node name="Top" type="CollisionShape2D" parent="ArenaBounds" unique_id=108316577]
+shape = SubResource("WorldBoundaryShape2D_top")
+
+[node name="Bottom" type="CollisionShape2D" parent="ArenaBounds" unique_id=29621927]
+shape = SubResource("WorldBoundaryShape2D_bottom")
+
+[node name="Left" type="CollisionShape2D" parent="ArenaBounds" unique_id=399826277]
+shape = SubResource("WorldBoundaryShape2D_left")
+
+[node name="Right" type="CollisionShape2D" parent="ArenaBounds" unique_id=219721134]
+shape = SubResource("WorldBoundaryShape2D_right")
+
+[node name="Doors" type="Node2D" parent="." unique_id=1820075631]
+
+[node name="DoorSouth" parent="Doors" unique_id=213233813 instance=ExtResource("5_door")]
+position = Vector2(0, 485)
+rotation = 3.1415927
+direction = 1
+
+[node name="DoorNorthLeft" parent="Doors" unique_id=1846999356 instance=ExtResource("5_door")]
+position = Vector2(-280, -485)
+
+[node name="DoorNorthCenter" parent="Doors" unique_id=733697153 instance=ExtResource("5_door")]
+position = Vector2(0, -485)
+
+[node name="DoorNorthRight" parent="Doors" unique_id=1225965582 instance=ExtResource("5_door")]
+position = Vector2(280, -485)
+
+[node name="Player" parent="." unique_id=1095979293 instance=ExtResource("2_player")]
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1422185241]
+
+[node name="WaveManager" type="Node" parent="." unique_id=1111871984]
+script = ExtResource("3_wave_mgr")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=787301576]
+
+[node name="HUD" type="MarginContainer" parent="UI" unique_id=507991464]
+offset_right = 380.0
+offset_bottom = 200.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+
+[node name="Panel" type="PanelContainer" parent="UI/HUD" unique_id=1624945435]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/HUD/Panel" unique_id=682492852]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="UI/HUD/Panel/VBox" unique_id=142791713]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+text = "《HARPE》MVP 真实产品闭环"
+
+[node name="WaveInfo" type="Label" parent="UI/HUD/Panel/VBox" unique_id=1863333413]
+layout_mode = 2
+text = "波次进度：WAVE 1 / 3"
+
+[node name="EnemiesInfo" type="Label" parent="UI/HUD/Panel/VBox" unique_id=455148948]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.4, 0.4, 1)
+text = "剩余恶灵：2 只"
+
+[node name="HPLabel" type="Label" parent="UI/HUD/Panel/VBox" unique_id=1536856090]
+layout_mode = 2
+text = "英雄生命值 (HP):"
+
+[node name="PlayerHP" type="ProgressBar" parent="UI/HUD/Panel/VBox" unique_id=42883641]
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+value = 100.0
+
+[node name="Tips" type="Label" parent="UI/HUD/Panel/VBox" unique_id=1581648991]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 0.9)
+text = "• WASD / 左摇杆: 移动 | A / Shift: 瞬步
+• X / 左键: 轻击/重斩 | B / 右键: 镜盾弹反"
+
+[node name="WaveBanner" type="Label" parent="UI" unique_id=1661857482]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 80.0
+offset_right = 250.0
+offset_bottom = 120.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.3, 1)
+theme_override_font_sizes/font_size = 26
+text = "— 第 1 波 降临 —"
+horizontal_alignment = 1
+
+[node name="BoonSelectUI" parent="UI" unique_id=956386065 instance=ExtResource("4_boon_ui")]
+visible = false
+
+[node name="FadeOverlay" type="ColorRect" parent="UI" unique_id=1769766207]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -13.0
+offset_right = 1.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.04, 0.06, 0.08, 1)
+
+[node name="VictoryPanel" type="Control" parent="UI" unique_id=748496052]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="UI/VictoryPanel" unique_id=1082567257]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.08, 0.04, 0.9)
+
+[node name="Center" type="CenterContainer" parent="UI/VictoryPanel" unique_id=1113622591]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/VictoryPanel/Center" unique_id=1978256591]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="UI/VictoryPanel/Center/VBox" unique_id=1036150705]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 36
+text = "✦  深 渊 试 炼 大 捷  ✦"
+horizontal_alignment = 1
+
+[node name="Desc" type="Label" parent="UI/VictoryPanel/Center/VBox" unique_id=737303636]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 18
+text = "手执弑神利刃，破除三重恶灵之潮！
+你已成功打通《HARPE》MVP 的所有核心循环！"
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="UI/VictoryPanel/Center/VBox" unique_id=1068422257]
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
+text = "✦ [ A / 点击 ] 再次挑战 (新一轮循环) ✦"
+script = ExtResource("6_restart_btn")
+
+[node name="DefeatPanel" type="Control" parent="UI" unique_id=2094964013]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="UI/DefeatPanel" unique_id=269112156]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.03, 0.03, 0.92)
+
+[node name="Center" type="CenterContainer" parent="UI/DefeatPanel" unique_id=1739369357]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/DefeatPanel/Center" unique_id=678109465]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="UI/DefeatPanel/Center/VBox" unique_id=448187586]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 36
+text = "☠  神 兵 沉 沦 于 深 渊  ☠"
+horizontal_alignment = 1
+
+[node name="Desc" type="Label" parent="UI/DefeatPanel/Center/VBox" unique_id=1622163983]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+text = "凡直视深渊之眼者皆化为死石……
+唯有向死而生，方能登峰造极！"
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="UI/DefeatPanel/Center/VBox" unique_id=75724374]
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
+text = "✦ [ A / 点击 ] 向死而生 (重铸利刃) ✦"
+script = ExtResource("6_restart_btn")
